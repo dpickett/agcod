@@ -51,6 +51,15 @@ module Agcod
     def process_response
       parse_response
 
+      #check for retry error
+      if self.xml_response.root.elements["Status/errorCode"] &&
+        self.xml_response.root.elements["Status/errorCode"].text == "E100" &&
+        !@sent_retry
+
+        @sent_retry = true
+        submit 
+      end
+
       @errors = []
 
       self.xml_response.root.elements.each("Error") do |e|
