@@ -16,7 +16,6 @@ When /^I send the request$/ do
 end
 
 Then /^it should be successful$/ do
-  require "ruby-debug"
   assert @request.successful?
 end
 
