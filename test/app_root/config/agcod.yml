@@ -1,0 +1,6 @@
+test:
+  access_key: fadsfasdgt2434
+  secret_key: dfasdf
+  partner_id: SomebodyImportant
+  uri: https://agcws-gamma.amazon.com/
+  discount_percentage: 0.04
