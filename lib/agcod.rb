@@ -1,9 +1,14 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require "net/http"
+require "net/https"
+require 'rexml/document'
+
 require "uri"
+require "base64"
 require "hmac-sha1"
 require "digest/sha1"
+require "CGI"
 
 require "agcod/error/invalid_parameter"
 require "agcod/error/configuration_error"
