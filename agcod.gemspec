@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "VERSION",
+     "agcod.gemspec",
      "features/create_a_giftcard.feature",
      "features/step_definitions/agcod_steps.rb",
      "features/support/app_root/config/agcod.example.yml",

@@ -8,7 +8,7 @@ require "uri"
 require "base64"
 require "hmac-sha1"
 require "digest/sha1"
-require "CGI"
+require "cgi"
 
 require "agcod/error/invalid_parameter"
 require "agcod/error/configuration_error"
