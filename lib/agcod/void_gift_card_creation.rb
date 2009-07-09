@@ -8,7 +8,7 @@ module Agcod
 
       validate_presence_of("request_id")
 
-      @parameters["gcCreationRequestId"] = Agcod::Configuration.partner_id.to_s + Agcod::Configuration.request_id.to_s
+      @parameters["gcCreationRequestId"] = Agcod::Configuration.partner_id.to_s + self.request_id.to_s
     end
   end  
 end

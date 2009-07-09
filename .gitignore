@@ -4,3 +4,5 @@ coverage
 rdoc
 pkg
 features/support/app_root/config/agcod.yml
+log
+agcod_cucumber.log
