@@ -9,6 +9,7 @@ require "base64"
 require "hmac-sha1"
 require "digest/sha1"
 require "cgi"
+require "logger"
 
 require "agcod/error/invalid_parameter"
 require "agcod/error/configuration_error"

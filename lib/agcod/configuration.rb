@@ -9,6 +9,8 @@ module Agcod
     
     class << self
       attr_reader :options
+      attr_accessor :logger
+
       def load(app_root = nil, env = nil)
         if app_root
           @app_root = app_root

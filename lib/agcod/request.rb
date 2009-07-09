@@ -20,6 +20,7 @@ module Agcod
       send_request
 
       process_response
+      log if Agcod::Configuration.logger
     end
 
     def successful?
@@ -130,6 +131,13 @@ module Agcod
     def sort_parameters(params)
       key_value_strings = []
       params.sort{|a, b| a[0].downcase <=> b[0].downcase }
+    end
+
+    def log
+      log_string = "[AGCOD] #{self.action} Request"
+      log_string << " \##{self.request_id}" if self.request_id
+      log_string << " received response #{self.response_id}" if self.response_id
+      Agcod::Configuration.logger.debug log_string
     end
 
   end
