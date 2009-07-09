@@ -137,6 +137,9 @@ module Agcod
       log_string = "[AGCOD] #{self.action} Request"
       log_string << " \##{self.request_id}" if self.request_id
       log_string << " received response #{self.response_id}" if self.response_id
+      if self.respond_to?(:claim_code) && self.claim_code
+        log_string << " received claim_code #{self.claim_code}" 
+      end
       Agcod::Configuration.logger.debug log_string
     end
 

@@ -6,3 +6,4 @@ pkg
 features/support/app_root/config/agcod.yml
 log
 agcod_cucumber.log
+features/support/certification_requests

@@ -62,6 +62,7 @@ class Agcod::ConfigurationTest < Test::Unit::TestCase
       @request.stubs(:response_id).returns(4323535)
       @request.stubs(:send_request)
       @request.stubs(:process_response)
+      @request.stubs(:claim_code).returns(342145)
       @request.submit
     end
 
@@ -85,6 +86,10 @@ class Agcod::ConfigurationTest < Test::Unit::TestCase
 
     should "log response ids when applicable" do
       assert_match /#{@request.response_id}/, File.read(@log_path)
+    end
+
+    should "og claim code when applicable" do
+      assert_match /#{@request.claim_code}/, File.read(@log_path)
     end
   end
 

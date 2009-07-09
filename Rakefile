@@ -46,6 +46,8 @@ rescue LoadError
   end
 end
 
+require File.join(File.dirname(__FILE__), "lib", "agcod", "tasks")
+
 task :default => :spec
 
 require 'rake/rdoctask'

@@ -13,33 +13,33 @@ Feature: Successful Cases for Certification
     Then I should receive a successful response
   
   Scenario: #2a Successful Creation of a Gift Card for $12
-    Given I want to create a gift card in the amount of $12
+    Given I want to send request "1"
     When I send the request
     Then I should receive a successful response
     And I should get a claim code
 
   Scenario: #2b Successful Creation of a Gift Card for $999
-    Given I want to create a gift card in the amount of $999
+    Given I want to send request "2"
     When I send the request
     Then I should receive a successful response
     And I should get a claim code
 
   Scenario: #3 Sending the same Gift Card Request ID
-    Given I've sent a gift card request in the amount of $100
+    Given I've sent request "3"
     And the request was successful
     And I want to create a gift card with the same request id
     When I send the request
     Then I should not receive a successful response
 
   Scenario: #4 Cancel a Gift Card Successfully
-    Given I've sent a gift card request in the amount of $50.02
+    Given I've sent request "4"
     And the request was successful
     And I want to cancel the gift card requested
     When I send the request
     Then I should receive a successful response
 
   Scenario: #5 Void a Gift Card Successfully
-    Given I've sent a gift card request in the amount of $999.99
+    Given I've sent request "5"
     And the request was successful
     And I want to void the gift card requested
     When I send the request

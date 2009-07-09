@@ -3,12 +3,10 @@ Given /^I have access to the AGCOD web service$/ do
   assert_not_nil Agcod::Configuration.access_key
 end
 
-Given /^I want to create a gift card in the amount of \$(.*)$/ do |value|
-  @value = value.to_f
-  @request_id = ""
-  8.times {@request_id << rand(9).to_s}
-
-  @request = Agcod::CreateGiftCard.new("value" => @value, "request_id" => @request_id)
+Given /^I want to send request \"(.*)\"/ do |request_number|
+  req = get_request(request_number)
+  @request = Agcod::CreateGiftCard.new("value" => req["value"].to_f, 
+    "request_id" => req["request_id"])
 end
 
 Given /^I am logging transactions$/ do
@@ -20,11 +18,12 @@ Given /^I want to send a health check request$/ do
   @request = Agcod::HealthCheck.new
 end
 
-Given /^I've sent a gift card request in the amount of \$(.*)$/ do |value|
-  request_id = ""
-  8.times {request_id << rand(9).to_s}
-  @prior_request = Agcod::CreateGiftCard.new("value" => value.to_f, "request_id" => request_id)
+Given /^I've sent request \"(.*)\"$/ do |request_number|
+  req = get_request(request_number)
+  @prior_request = Agcod::CreateGiftCard.new("value" => req["value"].to_f,
+   "request_id" => req["request_id"])
   @prior_request.submit
+  dump_request(@prior_request)
 end
 
 Given /^I want to cancel the gift card requested$/ do
@@ -51,6 +50,7 @@ end
 
 When /^I send the request$/ do
   @request.submit
+  dump_request(@request) if @request.is_a?(Agcod::CreateGiftCard)
 end
 
 Then /^I should receive a successful response$/ do
@@ -65,3 +65,30 @@ Then /^I should get a claim code$/ do
   assert_not_nil @request.claim_code
 end
 
+
+def cert_fixture(req_num)
+  File.join(
+    File.dirname(__FILE__), "..", "support", "certification_requests", "#{req_num}.yml"
+  )
+end
+
+def get_request(req_num)
+  YAML.load(File.read(cert_fixture(req_num)))
+end
+
+def dump_request(req)
+  req_num = req.request_id[0..0]
+
+  
+  req_hash = {
+    "request_id" => req.request_id,
+    "value" => req.value,
+    "response_id" => req.response_id,
+    "claim_code" => req.claim_code
+  }
+
+  FileUtils.rm_f(cert_fixture(req_num))
+  File.open(cert_fixture(req_num), "w") do |f|
+    f.puts req_hash.to_yaml
+  end
+end
