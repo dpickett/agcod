@@ -5,8 +5,8 @@ end
 
 Given /^I want to send request \"(.*)\"/ do |request_number|
   req = get_request(request_number)
-  @request = Agcod::CreateGiftCard.new("value" => req["value"].to_f, 
-    "request_id" => req["request_id"])
+  @options ||= {} 
+  @request = Agcod::CreateGiftCard.new(req.merge(@options))
 end
 
 Given /^I am logging transactions$/ do
@@ -42,7 +42,33 @@ end
 
 Given /^I want to create a gift card with the same request id$/ do
   @request = Agcod::CreateGiftCard.new("value" => 40, "request_id" => @prior_request.request_id)
+  @dont_dump_request = true
 end
+
+Given /^I want to cancel request "([^\"]*)"$/ do |req_num|
+  req = get_request(req_num)
+  @options ||= {}
+  @request = Agcod::CancelGiftCard.new(req.merge(@options))
+end
+
+Given /^I want to void request "([^\"]*)"$/ do |req_num|
+  req = get_request(req_num)
+  @options ||= {}
+  @request = Agcod::VoidGiftCardCreation.new(req.merge(@options))
+end
+
+
+Given /^I specify response_id "([^\"]*)"$/ do |response_id|
+  @options ||= {}
+  @options["response_id"] = response_id
+end
+
+Given /^I specify the currency of "([^\"]*)"$/ do |currency|
+  @options ||= {}
+  @options["currency_code"] = currency
+end
+
+
 
 Then /^I should not receive a successful response$/ do
   assert !@request.successful?
@@ -50,7 +76,8 @@ end
 
 When /^I send the request$/ do
   @request.submit
-  dump_request(@request) if @request.is_a?(Agcod::CreateGiftCard)
+  dump_request(@request) if @request.is_a?(Agcod::CreateGiftCard) && !@dont_dump_request
+  @dont_dump_request = false if @dont_dump_request
 end
 
 Then /^I should receive a successful response$/ do

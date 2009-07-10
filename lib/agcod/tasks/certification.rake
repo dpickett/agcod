@@ -14,7 +14,10 @@ namespace :agcod do
         999.99,
         600,
         70,
-        100000
+        100000,
+        12,
+        12,
+        1
       ]
 
       path = File.join(FileUtils.pwd, "features", "support", "certification_requests")
