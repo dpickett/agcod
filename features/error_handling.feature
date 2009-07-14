@@ -13,7 +13,7 @@ Feature: Error Handling
     When I send the request
     Then I should not receive a successful response
 
-  Scenario: #9 Error Handling E200
+  Scenario: #9 Error Handling E204
     Given I specify response_id "A3REPY26ZX1BSY"
     And I want to cancel request "2"
     When I send the request

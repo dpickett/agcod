@@ -19,8 +19,10 @@ module Agcod
 
       send_request
 
-      process_response
-      log if Agcod::Configuration.logger
+      if @response
+        process_response
+        log if Agcod::Configuration.logger
+      end
     end
 
     def successful?
@@ -52,14 +54,6 @@ module Agcod
     def process_response
       parse_response
 
-      #check for retry error
-      if self.xml_response.root.elements["Status/errorCode"] &&
-        self.xml_response.root.elements["Status/errorCode"].text == "E100" &&
-        !@sent_retry
-
-        @sent_retry = true
-        submit 
-      end
 
       @errors = []
 
@@ -79,11 +73,24 @@ module Agcod
       @xml_response ||= REXML::Document.new(self.response)
     end
 
-    private
+    def attempt_retry
+      #check for retry error
+      if self.xml_response.root.elements["Status/errorCode"] &&
+        self.xml_response.root.elements["Status/errorCode"].text == "E100" &&
+        !@sent_retry
+
+        @sent_retry = true
+        submit 
+      end
+    end
+
+    protected
     def send_request
       #send the request
       uri = URI.parse(Agcod::Configuration.uri)
       http = Net::HTTP.new(uri.host, uri.port)
+      http.read_timeout = 20
+      http.open_timeout = 20
       http.use_ssl = true
 
       net_response, @response = http.get(uri.path + "?" + self.request)
@@ -129,7 +136,6 @@ module Agcod
 
 
     def sort_parameters(params)
-      key_value_strings = []
       params.sort{|a, b| a[0].downcase <=> b[0].downcase }
     end
 

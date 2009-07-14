@@ -26,6 +26,8 @@ module Agcod
       if self.successful?
         @claim_code = self.xml_response.root.elements["gcClaimCode"].text
         @response_id = self.xml_response.root.elements["gcCreationResponseId"].text
+      else
+        void_on_resend
       end
     end
 
@@ -39,5 +41,47 @@ module Agcod
         "timestamp" => self.timestamp
       }.to_yaml(name)
     end
+
+    protected
+    def send_request
+      begin
+        super
+      rescue SocketError, 
+        Timeout::Error, 
+        ActiveResource::TimeoutError, 
+        Errno::ECONNREFUSED, 
+        Errno::EHOSTDOWN, 
+        Errno::EHOSTUNREACH
+
+        attempt_to_void
+      end
+    end
+
+    def attempt_retry
+      #check for retry error
+      if self.xml_response.root.elements["Status/errorCode"] &&
+        self.xml_response.root.elements["Status/errorCode"].text == "E100" &&
+        !@sent_retry
+
+        @sent_retry = true
+        submit 
+      end
+    end
+
+    private
+    def void_on_resend
+      if self.xml_response.root.elements["Status/errorCode"] &&
+        self.xml_response.root.elements["Status/errorCode"].text == "E100" &&
+        !@resend_void_sent
+        
+        @resend_void_sent = true
+        attempt_to_void
+      end
+    end
+
+    def attempt_to_void
+      Agcod::VoidGiftCardCreation.new("request_id" => self.request_id).submit
+    end
+
   end
 end

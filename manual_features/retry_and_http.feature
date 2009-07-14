@@ -37,5 +37,10 @@ Feature: Retry responses and HTTP Errors
     When I send the request
     Then I should not receive a successful response
 
+  Scenario: #17b $12 gift card
+    Given I want to send request "12"
+    When I send the request
+    Then I should receive a successful resposne
+
 
 

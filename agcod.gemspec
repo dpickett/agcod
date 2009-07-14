@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{agcod}
-  s.version = "0.0.0"
+  s.version = "0.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Dan Pickett"]
-  s.date = %q{2009-07-02}
+  s.date = %q{2009-07-09}
   s.email = %q{dpickett@enlightsolutions.com}
   s.extra_rdoc_files = [
     "LICENSE",
@@ -20,8 +20,11 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "agcod.gemspec",
+     "cucumber.yml",
      "features/create_a_giftcard.feature",
+     "features/error_handling.feature",
      "features/step_definitions/agcod_steps.rb",
+     "features/success_certification.feature",
      "features/support/app_root/config/agcod.example.yml",
      "features/support/env.rb",
      "lib/agcod.rb",
@@ -36,6 +39,9 @@ Gem::Specification.new do |s|
      "lib/agcod/tasks.rb",
      "lib/agcod/tasks/certification.rake",
      "lib/agcod/void_gift_card_creation.rb",
+     "manual_features/cancel_claimed_giftcard.feature",
+     "manual_features/insufficient_funds.feature",
+     "manual_features/retry_and_http.feature",
      "tasks/agcod.rake",
      "test/agcod/configuration_test.rb",
      "test/app_root/config/agcod.yml",
