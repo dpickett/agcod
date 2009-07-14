@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Dan Pickett"]
-  s.date = %q{2009-07-09}
+  s.date = %q{2009-07-14}
   s.email = %q{dpickett@enlightsolutions.com}
   s.extra_rdoc_files = [
     "LICENSE",
@@ -21,7 +21,6 @@ Gem::Specification.new do |s|
      "VERSION",
      "agcod.gemspec",
      "cucumber.yml",
-     "features/create_a_giftcard.feature",
      "features/error_handling.feature",
      "features/step_definitions/agcod_steps.rb",
      "features/success_certification.feature",
