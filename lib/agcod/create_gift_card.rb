@@ -27,7 +27,10 @@ module Agcod
         @claim_code = self.xml_response.root.elements["gcClaimCode"].text
         @response_id = self.xml_response.root.elements["gcCreationResponseId"].text
       else
-        void_on_resend
+        attempt_retry unless @sent_retry
+        if @sent_retry
+          void_on_resend
+        end
       end
     end
 
