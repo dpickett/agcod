@@ -1,6 +1,8 @@
 = agcod
 
-Description goes here.
+  sudo gem install gemcutter
+  sudo gem tumble
+  sudo gem install agcod
 
 == Copyright
 
