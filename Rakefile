@@ -5,7 +5,7 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "agcod"
-    gem.summary = %Q{TODO}
+    gem.summary = %Q{A Wrapper for Amazon Gift Cards On Demand}
     gem.email = "dpickett@enlightsolutions.com"
     gem.homepage = "http://github.com/dpickett/agcod"
     gem.authors = ["Dan Pickett"]
