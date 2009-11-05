@@ -56,7 +56,8 @@ module Agcod
         Errno::EHOSTDOWN, 
         Errno::EHOSTUNREACH
 
-        attempt_to_void
+        sleep(15)
+        attempt_to_void_with_retry
       end
     end
 
@@ -82,6 +83,20 @@ module Agcod
       end
     end
 
+    def attempt_to_void_with_retry
+      begin
+        attempt_to_void
+      rescue SocketError, 
+        Timeout::Error, 
+        ActiveResource::TimeoutError, 
+        Errno::ECONNREFUSED, 
+        Errno::EHOSTDOWN, 
+        Errno::EHOSTUNREACH
+          sleep(15)
+          attempt_to_void
+      end
+    end
+    
     def attempt_to_void
       Agcod::VoidGiftCardCreation.new("request_id" => self.request_id).submit
     end
