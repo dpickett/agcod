@@ -15,7 +15,7 @@ module Agcod
         if app_root
           @app_root = app_root
         else
-          @app_root = RAILS_ROOT if defined?(RAILS_ROOT)
+          @app_root = Rails.root if defined?(Rails)
         end
         
         if @app_root.nil? || 
@@ -26,7 +26,7 @@ module Agcod
 
         config_file = File.read(config_filename)
 
-        environment = RAILS_ENV if defined?(RAILS_ENV)
+        environment = Rails.env if defined?(Rails)
         environment = env if env
 
         @options = YAML.load(config_file)[environment]
