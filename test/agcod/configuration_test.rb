@@ -14,7 +14,7 @@ class Agcod::ConfigurationTest < Test::Unit::TestCase
     end
 
     should "raise an error if the configuration file isn't specified" do
-      assert_raise Agcod::Error::ConfigurationError do 
+      assert_raise Agcod::Error::ConfigurationError do
         Agcod::Configuration.load
       end
     end
@@ -31,16 +31,16 @@ class Agcod::ConfigurationTest < Test::Unit::TestCase
         assert_not_nil Agcod::Configuration.send(opt)
       end
     end
-    
+
     should "allow me to set config options at runtime" do
       Agcod::Configuration.set(@valid_options)
       assert_equal Agcod::Configuration.access_key, @valid_options["access_key"]
     end
 
     should_require_config_options [
-      "access_key", 
-      "secret_key", 
-      "partner_id", 
+      "access_key",
+      "secret_key",
+      "partner_id",
       "uri",
       "discount_percentage"
     ]
@@ -50,6 +50,7 @@ class Agcod::ConfigurationTest < Test::Unit::TestCase
     setup do
       configure_with_valid_options
       @log_path = File.join(File.dirname(__FILE__), "..", "log", "test.log")
+      FileUtils.mkdir_p(File.dirname(@log_path))
       FileUtils.touch(@log_path)
       @logger = Logger.new(@log_path)
       @logger.level = Logger::DEBUG
@@ -57,7 +58,7 @@ class Agcod::ConfigurationTest < Test::Unit::TestCase
       Agcod::Configuration.logger = @logger
 
       FakeWeb.allow_net_connect = false
-      
+
       @request = Agcod::CreateGiftCard.new("request_id" => 34234, "value" => 12)
       @request.stubs(:response_id).returns(4323535)
       @request.stubs(:send_request)
@@ -67,7 +68,7 @@ class Agcod::ConfigurationTest < Test::Unit::TestCase
     end
 
     teardown do
-      FileUtils.rm_f(@log_path) 
+      FileUtils.rm_f(@log_path)
     end
 
     should "allow me to define a logger for logging requests" do
