@@ -25,6 +25,12 @@ class Agcod::ConfigurationTest < Test::Unit::TestCase
       end
     end
 
+    should "raise an error if the environment key is not included in the config file" do
+      assert_raise Agcod::Error::ConfigurationError do
+        Agcod::Configuration.load(File.join(File.dirname(__FILE__), "..", "app_root"), "staging")
+      end
+    end
+
     should "read configuration from a supplied app root" do
       Agcod::Configuration.load(File.join(File.dirname(__FILE__), "..", "app_root"), "test")
       Agcod::Configuration::REQUIRED_OPTIONS.each do |opt|
