@@ -1,27 +1,13 @@
-require 'rubygems'
-require 'rake'
-
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = "agcod"
-    gem.summary = %Q{A Wrapper for Amazon Gift Cards On Demand}
-    gem.email = "dpickett@enlightsolutions.com"
-    gem.homepage = "http://github.com/dpickett/agcod"
-    gem.authors = ["Dan Pickett"]
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
-  end
-
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
-end
-
+require 'bundler/gem_tasks'
 require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/*_test.rb'
-  test.verbose = true
+
+Rake::TestTask.new('test') do |t|
+  t.libs << 'lib' << 'test'
+  t.pattern = 'test/**/*_test.rb'
+  t.verbose = true
 end
+
+task :default => :test
 
 begin
   require 'rcov/rcovtask'
@@ -37,30 +23,17 @@ rescue LoadError
   end
 end
 
-begin
-  require 'cucumber/rake/task'
-  Cucumber::Rake::Task.new(:features)
-rescue LoadError
-  task :features do
-    abort "Cucumber is not available. In order to run features, you must: sudo gem install cucumber"
-  end
-end
+require 'cucumber/rake/task'
+Cucumber::Rake::Task.new(:features)
 
 require File.join(File.dirname(__FILE__), "lib", "agcod", "tasks")
 
-task :default => :spec
-
-require 'rake/rdoctask'
+require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
-  if File.exist?('VERSION.yml')
-    config = YAML.load(File.read('VERSION.yml'))
-    version = "#{config[:major]}.#{config[:minor]}.#{config[:patch]}"
-  else
-    version = ""
-  end
+  require 'agcod/version'
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "agcod #{version}"
+  rdoc.title = "agcod #{ Agcod::VERSION }"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end

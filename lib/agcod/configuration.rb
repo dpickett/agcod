@@ -1,12 +1,12 @@
 module Agcod
   class Configuration
-    REQUIRED_OPTIONS = ["access_key", 
+    REQUIRED_OPTIONS = ["access_key",
       "secret_key",
       "partner_id",
       "uri",
       "discount_percentage"
-    ]    
-    
+    ]
+
     class << self
       attr_reader :options
       attr_accessor :logger
@@ -17,11 +17,11 @@ module Agcod
         else
           @app_root = Rails.root if defined?(Rails)
         end
-        
-        if @app_root.nil? || 
+
+        if @app_root.nil? ||
           !FileTest.exists?(config_filename = File.join(@app_root, 'config', 'agcod.yml'))
-          
-          raise Error::ConfigurationError, "Configuration for AGCOD not found" 
+
+          raise Error::ConfigurationError, "Configuration for AGCOD not found"
         end
 
         config_file = File.read(config_filename)
@@ -30,6 +30,7 @@ module Agcod
         environment = env if env
 
         @options = YAML.load(config_file)[environment]
+        raise Error::ConfigurationError, "Configuration for AGCOD (#{ environment } environment) not found" unless @options
         validate_options
         @options
       end
@@ -41,7 +42,7 @@ module Agcod
         validate_options
         @options
       end
-     
+
       def access_key
         @options["access_key"]
       end
@@ -63,13 +64,13 @@ module Agcod
       end
 
       private
-      
+
       def validate_options
         REQUIRED_OPTIONS.each do |opt|
           if options[opt].nil? || options[opt] == ""
-            raise Error::ConfigurationError, "#{opt} was not specified" 
+            raise Error::ConfigurationError, "#{opt} was not specified"
           end
-        end    
+        end
       end
     end
   end
