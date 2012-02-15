@@ -8,7 +8,10 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'agcod'
 
-begin require "redgreen" rescue Exception; end
+begin
+  require "redgreen"
+rescue LoadError
+end
 
 FakeWeb.allow_net_connect = false
 
