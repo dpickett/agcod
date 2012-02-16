@@ -18,8 +18,8 @@ FakeWeb.allow_net_connect = false
 require "macros/configuration"
 
 class Test::Unit::TestCase
-  def register_response(path, fixture)
-    
+  def register_response(uri, fixture)
+    FakeWeb.register_uri(:get, uri, :body => IO.read(xml_fixture_path(fixture)))
   end
 
   def xml_fixture_path(fixture)
