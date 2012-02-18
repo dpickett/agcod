@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<HealthCheckResponse xmlns="http://agcws.amazon.com/doc/2008-01-01/">
+  <MessageHeader>
+    <messageType>HealthCheckResponse</messageType>
+    <sourceId>AMAZON</sourceId>
+    <recipientId>SomebodyImportant</recipientId>
+    <contentVersion>2008-01-01</contentVersion>
+    <retryCount>0</retryCount>
+  </MessageHeader>
+  <Status>
+    <statusCode>SUCCESS</statusCode>
+    <errorCode/>
+    <statusMessage>HealthCheck Request successful</statusMessage>
+  </Status>
+</HealthCheckResponse>

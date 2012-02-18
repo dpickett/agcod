@@ -49,11 +49,14 @@ module Agcod
       @response_id || @options["response_id"]
     end
 
-    protected 
+    def request_url
+      "#{ Agcod::Configuration.uri }?#{ build_sorted_and_signed_request_string }"
+    end
+
+    protected
 
     def process_response
       parse_response
-
 
       @errors = []
 
@@ -76,24 +79,24 @@ module Agcod
     def attempt_retry
       #check for retry error
       if self.xml_response.root.elements["Status/errorCode"] &&
-        self.xml_response.root.elements["Status/errorCode"].text == "E100" &&
-        !@sent_retry
-
+         self.xml_response.root.elements["Status/errorCode"].text == "E100" &&
+         ! @sent_retry
+      then
         @sent_retry = true
-        submit 
+        submit
       end
     end
 
-    protected
     def send_request
       #send the request
-      uri = URI.parse(Agcod::Configuration.uri)
+      uri = URI.parse request_url
       http = Net::HTTP.new(uri.host, uri.port)
       http.read_timeout = 20
       http.open_timeout = 20
       http.use_ssl = true
 
-      net_response, @response = http.get(uri.path + "?" + self.request)
+      net_response, @response = http.get(uri.path + "?" + uri.query)
+      @response ||= net_response.read_body
 
       @sent = true
     end
@@ -101,15 +104,15 @@ module Agcod
     def default_parameters
       @timestamp = Time.now.utc
       {
-        "Action" => self.action,
-        "AWSAccessKeyId" => Agcod::Configuration.access_key,
-        "SignatureVersion" => "1",
-        "MessageHeader.recipientId" => "AMAZON",
-        "MessageHeader.sourceId" => Agcod::Configuration.partner_id,
-        "MessageHeader.retryCount" => "0",
+        "Action"                       => self.action,
+        "AWSAccessKeyId"               => Agcod::Configuration.access_key,
+        "SignatureVersion"             => "1",
+        "MessageHeader.recipientId"    => "AMAZON",
+        "MessageHeader.sourceId"       => Agcod::Configuration.partner_id,
+        "MessageHeader.retryCount"     => "0",
         "MessageHeader.contentVersion" => "2008-01-01",
-        "MessageHeader.messageType" => self.action + "Request",
-        "Timestamp" => @timestamp.strftime("%Y-%m-%dT%H:%M:%S") + ".000Z"
+        "MessageHeader.messageType"    => self.action + "Request",
+        "Timestamp"                    => @timestamp.strftime("%Y-%m-%dT%H:%M:%S") + ".000Z"
       }
     end
 
@@ -144,7 +147,7 @@ module Agcod
       log_string << " \##{self.request_id}" if self.request_id
       log_string << " received response #{self.response_id}" if self.response_id
       if self.respond_to?(:claim_code) && self.claim_code
-        log_string << " received claim_code #{self.claim_code}" 
+        log_string << " received claim_code #{self.claim_code}"
       end
       Agcod::Configuration.logger.debug log_string
     end
