@@ -7,8 +7,7 @@ require 'rexml/document'
 require "uri"
 require "cgi"
 require "base64"
-require "hmac-sha1"
-require "digest/sha1"
+require 'openssl'
 require "cgi"
 require "logger"
 

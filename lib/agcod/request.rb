@@ -35,7 +35,8 @@ module Agcod
       #remove all the = and & from the serialized string
       sanitized_string = string_to_sign.gsub(/=|&/, "")
       # puts sanitized_string
-      sha1 = HMAC::SHA1::digest(Agcod::Configuration.secret_key, sanitized_string)
+      digest = OpenSSL::Digest::Digest.new('sha1')
+      sha1 = OpenSSL::HMAC.digest(digest, Agcod::Configuration.secret_key, sanitized_string)
 
       #Base64 encoding adds a linefeed to the end of the string so chop the last character!
       CGI.escape(Base64.encode64(sha1).chomp)
