@@ -95,6 +95,7 @@ module Agcod
       http.open_timeout = 20
       http.use_ssl = true
 
+      @response = @xml_response = nil
       net_response, @response = http.get(uri.path + "?" + uri.query)
       @response ||= net_response.read_body
 
