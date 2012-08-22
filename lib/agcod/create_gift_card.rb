@@ -49,6 +49,18 @@ module Agcod
       }.to_yaml(name)
     end
 
+    def status_message
+      self.xml_response.root.elements["Status/statusMessage"].text rescue nil
+    end
+
+    def status_code
+      self.xml_response.root.elements["Status/statusCode"].text rescue nil
+    end
+
+    def error_code
+      self.xml_response.root.elements["Status/errorCode"].text rescue nil
+    end
+
     protected
     def send_request
       begin
@@ -63,18 +75,6 @@ module Agcod
         sleep(retry_interval)
         attempt_to_void_with_retry
       end
-    end
-
-    def status_message
-      self.xml_response.root.elements["Status/statusMessage"].text rescue nil
-    end
-
-    def status_code
-      self.xml_response.root.elements["Status/statusCode"].text rescue nil
-    end
-
-    def error_code
-      self.xml_response.root.elements["Status/errorCode"].text rescue nil
     end
 
     def has_retry_error_code?
