@@ -66,6 +66,10 @@ module Agcod
     end
 
     def status_message
+      self.xml_response.root.elements["Status/statusMessage"].text rescue nil
+    end
+
+    def status_code
       self.xml_response.root.elements["Status/statusCode"].text rescue nil
     end
 
