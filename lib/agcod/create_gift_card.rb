@@ -28,9 +28,11 @@ module Agcod
         @claim_code = self.xml_response.root.elements["gcClaimCode"].text
         @response_id = self.xml_response.root.elements["gcCreationResponseId"].text
       else
+        attempt_to_void if has_retry_error_code?
+
         if should_attempt_retry?
+          log_message("received RESEND response, retrying in #{ retry_interval } seconds...")
           sleep(retry_interval)
-          void_on_resend
           attempt_retry
         end
       end
@@ -81,15 +83,15 @@ module Agcod
     end
 
     def attempt_retry
-      @attempts += 1
+      parameters['MessageHeader.retryCount'] = @attempts += 1
       submit
     end
 
     private
-    def void_on_resend
-      if has_retry_error_code? && ! @resend_void_sent
-        @resend_void_sent = true
-        attempt_to_void
+
+    def log_message(msg)
+      if Agcod::Configuration.logger
+        Agcod::Configuration.logger.debug msg
       end
     end
 
