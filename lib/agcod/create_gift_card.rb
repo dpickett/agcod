@@ -65,9 +65,16 @@ module Agcod
       end
     end
 
+    def status_message
+      self.xml_response.root.elements["Status/statusCode"].text rescue nil
+    end
+
+    def error_code
+      self.xml_response.root.elements["Status/errorCode"].text rescue nil
+    end
+
     def has_retry_error_code?
-      self.xml_response.root.elements["Status/errorCode"] &&
-      self.xml_response.root.elements["Status/errorCode"].text == "E100"
+      error_code == 'E100'
     end
 
     def should_attempt_retry?
