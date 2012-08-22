@@ -4,3 +4,5 @@ test:
   partner_id: SomebodyImportant
   uri: https://agcws-gamma.amazon.com/
   discount_percentage: 0.04
+  retry_limit: 5
+  retry_interval: 0

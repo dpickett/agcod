@@ -22,7 +22,7 @@ class Agcod::RequestTest < Test::Unit::TestCase
 
     should 'use response of retried request' do
       uri = URI.parse(@request.request_url)
-      register_response %r{^#{ uri.scheme }://#{ uri.host }}, %w( create_gift_card/retry create_gift_card/success )
+      register_response %r{^#{ uri.scheme }://#{ uri.host }}, %w( create_gift_card/resend create_gift_card/resend create_gift_card/success )
       @request.submit
       assert_equal "SUCCESS", @request.status
     end

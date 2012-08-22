@@ -8,7 +8,7 @@
     <retryCount>0</retryCount>
   </MessageHeader>
   <Status>
-    <statusCode>FAILURE</statusCode>
+    <statusCode>RESEND</statusCode>
     <errorCode>E100</errorCode>
     <statusMessage>Please retry</statusMessage>
   </Status>

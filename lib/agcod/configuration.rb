@@ -63,6 +63,14 @@ module Agcod
         @options["discount_percentage"]
       end
 
+      def retry_limit
+        @options['retry_limit']
+      end
+
+      def retry_interval
+        @options['retry_interval']
+      end
+
       private
 
       def validate_options
