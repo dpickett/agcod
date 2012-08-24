@@ -5,6 +5,7 @@
 .rvmrc
 Gemfile.lock
 agcod_cucumber.log
+bin
 coverage
 features/support/app_root/config/agcod.yml
 features/support/certification_requests

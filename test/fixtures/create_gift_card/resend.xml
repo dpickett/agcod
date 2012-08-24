@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<CreateGiftCardResponse xmlns="http://agcws.amazon.com/doc/2008-01-01/">
+  <MessageHeader>
+    <messageType>CreateGiftCardResponse</messageType>
+    <sourceId>AMAZON</sourceId>
+    <recipientId>SomebodyImportant</recipientId>
+    <contentVersion>2008-01-01</contentVersion>
+    <retryCount>0</retryCount>
+  </MessageHeader>
+  <Status>
+    <statusCode>RESEND</statusCode>
+    <errorCode>E100</errorCode>
+    <statusMessage>Please retry</statusMessage>
+  </Status>
+  <gcCreationRequestId>SomebodyImportant12345</gcCreationRequestId>
+  <gcCreationResponseId>ABC123DEF456</gcCreationResponseId>
+</CreateGiftCardResponse>
