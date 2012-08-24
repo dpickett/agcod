@@ -13,8 +13,6 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "agcod"
 
-  s.add_dependency "ruby-hmac"
-
   s.add_development_dependency 'cucumber'
   s.add_development_dependency 'fakeweb'
   s.add_development_dependency 'mocha'
