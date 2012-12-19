@@ -67,6 +67,12 @@ module Agcod
 
       @status = self.xml_response.root.elements["Status/statusCode"].text unless xml_response.root.elements["Status/statusCode"].nil?
 
+      # in some cases we have a failure and no Error elements.  Check for
+      # a status message in this case
+      if @status == 'FAILURE'
+        @errors << self.xml_response.root.elements["Status/statusMessage"].text unless xml_response.root.elements["Status/statusMessage"].nil?
+      end
+
       #something happened before it got to ACGWS (most likely a signature problem)
       @status = "FAILURE" if self.errors.size > 0 && self.status.blank?
 

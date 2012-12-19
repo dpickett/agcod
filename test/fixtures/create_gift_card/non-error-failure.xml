@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<CreateGiftCardResponse xmlns="http://agcws.amazon.com/doc/2008-01-01/">
+  <MessageHeader>
+    <messageType>CreateGiftCardResponse</messageType>
+    <sourceId>AMAZON</sourceId>
+    <recipientId>SomebodyImportant</recipientId>
+    <contentVersion>2008-01-01</contentVersion>
+    <retryCount>1</retryCount>
+  </MessageHeader>
+  <Status>
+    <statusCode>FAILURE</statusCode>
+    <errorCode></errorCode>
+    <statusMessage>Request Error </statusMessage>
+  </Status>
+  <gcCreationRequestId>SomebodyImportant12345</gcCreationRequestId>
+  <gcCreationResponseId>ABC123DEF456</gcCreationResponseId>
+  <gcClaimCode>AB12-CDE345-FG67</gcClaimCode>
+  <gcValue>
+    <amount>13.57</amount>
+    <currencyCode>USD</currencyCode>
+  </gcValue>
+</CreateGiftCardResponse>
