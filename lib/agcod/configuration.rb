@@ -63,6 +63,10 @@ module Agcod
         @options["discount_percentage"]
       end
 
+      def verify_mode
+        @options["verify_mode"]
+      end
+
       private
 
       def validate_options

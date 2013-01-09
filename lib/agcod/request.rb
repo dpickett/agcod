@@ -102,6 +102,10 @@ module Agcod
       http.open_timeout = 20
       http.use_ssl = true
 
+      if AGCOD::Configuration.verify_mode
+        http.verify_mode = AGCOD::Configuration.verify_mode.constantize
+      end
+
       @response = @xml_response = nil
       net_response, @response = http.get(uri.path + "?" + uri.query)
       @response ||= net_response.read_body
