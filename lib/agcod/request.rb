@@ -102,8 +102,8 @@ module Agcod
       http.open_timeout = 20
       http.use_ssl = true
 
-      if AGCOD::Configuration.verify_mode
-        http.verify_mode = AGCOD::Configuration.verify_mode.constantize
+      if Agcod::Configuration.verify_mode
+        http.verify_mode = Agcod::Configuration.verify_mode.constantize
       end
 
       @response = @xml_response = nil
