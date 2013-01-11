@@ -32,14 +32,11 @@ module Agcod
     attr_reader :errors, :request_id, :sent, :action, :request, :parameters, :response, :xml_response, :status, :timestamp
 
     def sign_string(string_to_sign)
-      #remove all the = and & from the serialized string
-      sanitized_string = string_to_sign.gsub(/=|&/, "")
-      # puts sanitized_string
-      digest = OpenSSL::Digest::Digest.new('sha1')
-      sha1 = OpenSSL::HMAC.digest(digest, Agcod::Configuration.secret_key, sanitized_string)
+      digest = OpenSSL::Digest::Digest.new('sha256')
+      sha256 = OpenSSL::HMAC.digest(digest, Agcod::Configuration.secret_key, string_to_sign)
 
       #Base64 encoding adds a linefeed to the end of the string so chop the last character!
-      CGI.escape(Base64.encode64(sha1).chomp)
+      CGI.escape(Base64.encode64(sha256).chomp)
     end
 
     def request_id
@@ -118,7 +115,8 @@ module Agcod
       {
         "Action"                       => self.action,
         "AWSAccessKeyId"               => Agcod::Configuration.access_key,
-        "SignatureVersion"             => "1",
+        "SignatureVersion"             => "2",
+        "SignatureMethod"              => "HmacSHA256",
         "MessageHeader.recipientId"    => "AMAZON",
         "MessageHeader.sourceId"       => Agcod::Configuration.partner_id,
         "MessageHeader.retryCount"     => "0",
@@ -129,26 +127,19 @@ module Agcod
     end
 
     def build_sorted_and_signed_request_string
-      params_to_submit = default_parameters.merge(self.parameters)
-
-      unencoded_key_value_strings = []
+      params_to_submit = default_parameters.merge(self.parameters).sort
+      string_to_sign   = build_v2_string_to_sign(params_to_submit)      
       encoded_key_value_strings = []
-      sort_parameters(params_to_submit).each do |p|
-        unencoded_key_value_strings << p[0].to_s + p[1].to_s
 
-        if p[0] =~ /Timestamp/i
-          encoded_value = p[1]
-        else
-          encoded_value = CGI.escape(p[1].to_s)
-        end
+      params_to_submit.each do |p|
+        encoded_value = p[0] =~ /Timestamp/i ? p[1] : CGI.escape(p[1].to_s)
         encoded_key_value_strings << p[0].to_s + "=" + encoded_value
       end
 
-      signature = sign_string(unencoded_key_value_strings.join(""))
-      encoded_key_value_strings.insert(encoded_key_value_strings.index("SignatureVersion=1") + 1 , "Signature=" + signature)
+      signature = sign_string(string_to_sign)
+      encoded_key_value_strings.insert(encoded_key_value_strings.index("SignatureVersion=2") + 1 , "Signature=" + signature)
       encoded_key_value_strings.join("&")
     end
-
 
     def sort_parameters(params)
       params.sort{|a, b| a[0].downcase <=> b[0].downcase }
@@ -164,5 +155,23 @@ module Agcod
       Agcod::Configuration.logger.debug log_string
     end
 
+    def build_v2_string_to_sign(parameters)
+      parsed_uri = URI.parse(Agcod::Configuration.uri)
+
+      string_to_sign = "GET\n#{parsed_uri.host.downcase}\n#{parsed_uri.path}\n"
+
+      parameters.sort.each_with_index do |v, i|
+        string_to_sign << '&' unless i == 0
+
+        string_to_sign << urlencode(v[0])
+        string_to_sign << "=#{urlencode(v[1])}" if !v[1].nil?
+      end
+
+      return string_to_sign
+    end
+
+    def urlencode(plaintext)
+      CGI.escape(plaintext.to_s).gsub("+", "%20").gsub("%7E", "~")
+    end
   end
 end
