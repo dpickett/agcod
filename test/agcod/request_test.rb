@@ -42,4 +42,36 @@ class Agcod::RequestTest < Test::Unit::TestCase
       assert(@request.errors.count > 0)
     end
   end
+
+  context 'signature version 2' do
+    setup do
+      Agcod::Configuration.load(File.join(File.dirname(__FILE__), "..", "app_root"), "test")
+      @request = Agcod::HealthCheck.new
+      register_response @request.request_url, "health_check/success"
+    end
+
+    should "sort params using lexicographic byte ordering" do
+      @request.submit
+      proper_order = %w(AWSAccessKeyId Action MessageHeader.contentVersion MessageHeader.messageType MessageHeader.recipientId MessageHeader.retryCount MessageHeader.sourceId SignatureMethod SignatureVersion Signature Timestamp)
+      assert_equal proper_order, @request.request.split("&").map{|param| param.split('=').first}
+    end
+
+    should "include SignatureMethod=HmacSHA256&SignatureVersion=2 in the query string" do
+      @request.submit
+      assert @request.request.include?("SignatureMethod=HmacSHA256&SignatureVersion=2")
+    end
+
+    should 'begin with the request method, http host, and path in the string to sign' do
+      @request.submit
+      request_string_to_sign = @request.send(:build_v2_string_to_sign, @request.send(:default_parameters).merge(@request.parameters).sort)
+      assert request_string_to_sign.include?("GET\nagcws-gamma.amazon.com\n/\n")
+    end
+
+    should "use a sha256 digest" do
+      d = mock('digest')
+      OpenSSL::Digest::Digest.expects(:new).twice.with('sha256').returns(d)
+      OpenSSL::HMAC.expects(:digest).twice.returns ""
+      @request.submit
+    end
+  end
 end

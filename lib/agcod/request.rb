@@ -136,9 +136,9 @@ module Agcod
         encoded_key_value_strings << p[0].to_s + "=" + encoded_value
       end
 
-     signature = sign_string(string_to_sign)
-     encoded_key_value_strings.insert(encoded_key_value_strings.index("SignatureVersion=2") + 1 , "Signature=" + signature)
-     encoded_key_value_strings.join("&")
+      signature = sign_string(string_to_sign)
+      encoded_key_value_strings.insert(encoded_key_value_strings.index("SignatureVersion=2") + 1 , "Signature=" + signature)
+      encoded_key_value_strings.join("&")
     end
 
     def sort_parameters(params)
@@ -160,12 +160,12 @@ module Agcod
 
       string_to_sign = "GET\n#{parsed_uri.host.downcase}\n#{parsed_uri.path}\n"
 
-      parameters.sort.each_with_index { |v, i|
+      parameters.sort.each_with_index do |v, i|
         string_to_sign << '&' unless i == 0
 
         string_to_sign << urlencode(v[0])
         string_to_sign << "=#{urlencode(v[1])}" if !v[1].nil?
-      }
+      end
 
       return string_to_sign
     end
