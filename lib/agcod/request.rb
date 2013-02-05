@@ -128,7 +128,7 @@ module Agcod
 
     def build_sorted_and_signed_request_string
       params_to_submit = default_parameters.merge(self.parameters).sort
-      string_to_sign   = build_v2_string_to_sign(params_to_submit)      
+      string_to_sign   = build_v2_string_to_sign(params_to_submit)
       encoded_key_value_strings = []
 
       params_to_submit.each do |p|
@@ -171,7 +171,7 @@ module Agcod
     end
 
     def urlencode(plaintext)
-      CGI.escape(plaintext.to_s).gsub("+", "%20").gsub("%7E", "~")
+      URI.encode(plaintext.to_s)
     end
   end
 end
