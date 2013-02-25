@@ -163,15 +163,17 @@ module Agcod
       parameters.sort.each_with_index do |v, i|
         string_to_sign << '&' unless i == 0
 
-        string_to_sign << urlencode(v[0])
-        string_to_sign << "=#{urlencode(v[1])}" if !v[1].nil?
+        string_to_sign << escape(v[0])
+        string_to_sign << "=#{escape(v[1])}" if !v[1].nil?
       end
+
+      string_to_sign.gsub('+', '%20')
 
       return string_to_sign
     end
 
-    def urlencode(plaintext)
-      ERB::Util.url_encode(plaintext.to_s)
+    def escape(plaintext)
+      CGI.escape(plaintext.to_s)
     end
   end
 end
