@@ -158,7 +158,7 @@ module Agcod
     def build_v2_string_to_sign(parameters)
       parsed_uri = URI.parse(Agcod::Configuration.uri)
 
-      string_to_sign = "GET\n#{parsed_uri.host.downcase}\n#{parsed_uri.path}\n"
+      string_to_sign = "GET\n#{parsed_uri.host.downcase}\n#{parsed_uri.request_uri}\n"
 
       parameters.sort.each_with_index do |v, i|
         string_to_sign << '&' unless i == 0
@@ -171,7 +171,7 @@ module Agcod
     end
 
     def urlencode(plaintext)
-      URI.encode(plaintext.to_s)
+      CGI.escape(plaintext.to_s).gsub("+", "%20").gsub("%7E", "~")
     end
   end
 end
