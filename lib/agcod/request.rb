@@ -32,7 +32,7 @@ module Agcod
     attr_reader :errors, :request_id, :sent, :action, :request, :parameters, :response, :xml_response, :status, :timestamp
 
     def sign_string(string_to_sign)
-      digest = OpenSSL::Digest::Digest.new('sha256')
+      digest = OpenSSL::Digest.new('sha256')
       sha256 = OpenSSL::HMAC.digest(digest, Agcod::Configuration.secret_key, string_to_sign)
 
       #Base64 encoding adds a linefeed to the end of the string so chop the last character!

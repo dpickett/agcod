@@ -69,7 +69,7 @@ class Agcod::RequestTest < Test::Unit::TestCase
 
     should "use a sha256 digest" do
       d = mock('digest')
-      OpenSSL::Digest::Digest.expects(:new).twice.with('sha256').returns(d)
+      OpenSSL::Digest.expects(:new).twice.with('sha256').returns(d)
       OpenSSL::HMAC.expects(:digest).twice.returns ""
       @request.submit
     end
