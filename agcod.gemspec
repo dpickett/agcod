@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.name        = "agcod"
   s.version     = Agcod::VERSION
   s.authors     = ["Dan Pickett"]
-  s.email       = %q{dpickett@enlightsolutions.com}
+  s.email       = %q{dan.pickett@launchacademy.com}
   s.homepage    = %q{http://github.com/dpickett/agcod}
   s.summary     = %q{A Wrapper for Amazon Gift Codes On Demand}
   s.description = %q{Access the Amazon API to order gift codes}
